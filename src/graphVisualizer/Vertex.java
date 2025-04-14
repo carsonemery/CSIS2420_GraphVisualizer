@@ -2,14 +2,14 @@ package graphVisualizer;
 
 /**
  * class Vertex and its fields, contructors, getters and setters
- * Will define what a vertext will be upon user input
+ * Will define what a vertex will be upon user input
  * 
  * @author lincoln
  */
 public class Vertex {
-	public int x; //x positon on screen
-	public int y; //y position on screen
-	public String label; //label of what the vertex will be
+	private int x; //x positon on screen
+	private int y; //y position on screen
+	private String label; //label of what the vertex will be
 	
 	/**
 	 * constructor for class vertex
