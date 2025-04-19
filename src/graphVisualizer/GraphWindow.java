@@ -18,6 +18,7 @@ public class GraphWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private Graph graph = new Graph(false); 
 
 	/**
 	 * Launch the application.
@@ -73,21 +74,28 @@ public class GraphWindow extends JFrame {
 
         // ---------- BOTTOM PANEL ----------
         JPanel bottomPanel = new JPanel(new BorderLayout());
+        
+        // ---------- CENTER PANEL (GraphCanvas Placeholder) ----------
+//      JPanel centerPanel = new JPanel(); // Placeholder for GraphCanvas
+      GraphCanvas graphCanvas = new GraphCanvas(graph);
+      graphCanvas.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+//      centerPanel.setBackground(Color.WHITE);
+//      centerPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
         // Bottom Left: Clear button
         JButton clearButton = new JButton("Clear Graph");
         JPanel clearPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         clearPanel.add(clearButton);
         bottomPanel.add(clearPanel, BorderLayout.WEST);
-
-        // ---------- CENTER PANEL (GraphCanvas Placeholder) ----------
-        JPanel centerPanel = new JPanel(); // Placeholder for GraphCanvas
-        centerPanel.setBackground(Color.WHITE);
-        centerPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        clearButton.addActionListener(e -> {
+        	graph.getVertices().clear();
+        	graph.getEdges().clear();
+        	graphCanvas.repaint();
+        });
 
         // Assemble all
         mainPanel.add(topPanel, BorderLayout.NORTH);
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
+        mainPanel.add(graphCanvas, BorderLayout.CENTER);
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
