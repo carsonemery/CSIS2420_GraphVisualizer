@@ -14,6 +14,7 @@ public class Graph {
 	private List<Vertex> vertices;
 	private List<Edge> edges;
 	private boolean isDirected;
+	private Iterable<Integer> sources;
 
 	/**
 	 * constructor for class Graph
@@ -116,7 +117,7 @@ public class Graph {
 			edges.add(reverseEdge);
 
 			// link the edges as reverse pairs
-			 edge.setReverseOf(reverseEdge);
+			edge.setReverseOf(reverseEdge);
 		}
 	}
 
