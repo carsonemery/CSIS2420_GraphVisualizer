@@ -9,6 +9,7 @@ package graphVisualizer;
 public class Vertex {
 	private int x; // x position on screen
 	private int y; // y position on screen
+	private String label; // label of the vertex, would be a string representation of an int
 	private int value; // label of what the vertex will be
 	private double radius; // radius of a vertex, helps for proximity calculations and connecting via
 							// edges,
@@ -20,11 +21,31 @@ public class Vertex {
 	 * @param y     the y position
 	 * @param label the label of the vertex
 	 */
-	public Vertex(int x, int y, int value) {
+	public Vertex(int x, int y, String label) {
 		this.x = x;
 		this.y = y;
-		this.value = value;
+		this.label = label;
 		this.radius = 15; // currently set a default size of the radius
+		
+		try {
+			this.value = Integer.parseInt(label);
+		} catch (NumberFormatException e) {
+			throw new IllegalArgumentException("Vertex label must be a positive or valid integer (no decimal)");
+		}
+		
+	}
+	
+	public String getLabel() {
+		return label;
+	}
+	
+	public void setLabel(String label) {
+		try {
+			this.value = Integer.parseInt(label);
+			this.label = label;
+		} catch (NumberFormatException e) {
+			throw new IllegalArgumentException("Vertex must be a valid integer");
+		}
 	}
 
 	/**
@@ -78,8 +99,9 @@ public class Vertex {
 	 * 
 	 * @param label the to-be label
 	 */
-	public void setValue(int label) {
+	public void setValue(int value) {
 		this.value = value;
+		this.label = String.valueOf(value);
 	}
 
 	/**

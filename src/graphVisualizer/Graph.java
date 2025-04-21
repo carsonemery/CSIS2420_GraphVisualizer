@@ -232,21 +232,21 @@ public class Graph {
 	 * @param start         starting vertex
 	 * @param end           ending vertex (if applicable)
 	 */
-	public void runAlgorithm(String algorithmName, Vertex start, Vertex end) {
-		Algs4Adapter adapter = new Algs4Adapter(this);
-		switch (algorithmName) {
-		case "BFS":
-			adapter.runBFS(start, end);
-			break;
-		case "DFS":
-			adapter.runDFS(start, end);
-			break;
-		case "Dijkstra":
-			adapter.runDijkstra(start, end);
-			break;
-		// we can add more algs here
-		}
-	}
+	 public void runAlgorithm(String algorithmName, Vertex start, Vertex end) {
+	 	Algs4Adapter adapter = new Algs4Adapter(this);
+	 	switch (algorithmName) {
+	 	case "BFS":
+	 		adapter.runBFS(start, end);
+	 		break;
+	 	case "DFS":
+	 		adapter.runDFS(start, end);
+	 		break;
+	 	case "Dijkstra":
+	 		adapter.runDijkstra(start, end);
+	 		break;
+	 	// we can add more algs here
+	 	}
+	 }
 
 	/**
 	 * clears all vertices and edges from the graph
