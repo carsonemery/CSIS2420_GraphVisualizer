@@ -3,12 +3,15 @@ package graphVisualizer;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GraphCanvas extends JPanel {
 
     private static final long serialVersionUID = 1L;
 	private Graph graph;
     private Vertex selectedVertex; // used when drawing edges
+    private List<Vertex> path;
 
     public GraphCanvas(Graph graph) {
         this.graph = graph;
@@ -88,4 +91,26 @@ public class GraphCanvas extends JPanel {
             g.drawString(v.getLabel(), v.getX() - r / 2, v.getY() + 4);
         }
     }
+    
+    public void setSelectionMode(boolean mode) {
+    	
+    }
+    
+    public Vertex getStartVertex() {
+    	return null;
+    }
+    
+    public Vertex getEndVertex() {
+    	return null;
+    }
+    
+    public void resetSelections() {
+    	
+    }
+    
+    public void setPath(List<Vertex> path) {
+    	this.path = path;
+    }
+    
+    
 }

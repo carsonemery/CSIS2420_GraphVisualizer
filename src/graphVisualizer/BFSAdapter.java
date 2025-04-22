@@ -3,6 +3,7 @@ package graphVisualizer;
 import edu.princeton.cs.algs4.Stack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,7 +93,13 @@ public class BFSAdapter {
 			path.add(indexToVertex.get(i));
 		}
 
-		return null;
+		// add the start vertex at the end
+		path.add(indexToVertex.get(startIndex));
+
+		// reverse the path
+		Collections.reverse(path);
+
+		return path;
 	}
 
 	// breadth-first search from a single vertex to
@@ -171,95 +178,11 @@ public class BFSAdapter {
 		return distTo[v];
 	}
 
-	/**
-	 * Returns a shortest path between the source vertex {@code s} (or sources) and
-	 * {@code v}, or {@code null} if no such path.
-	 * 
-	 * @param v the vertex
-	 * @return the sequence of vertices on a shortest path, as an Iterable
-	 * @throws IllegalArgumentException unless {@code 0 <= v < V}
-	 */
-	public Iterable<Integer> pathTo(int v) {
-		validateVertex(v);
-		if (!hasPathTo(v))
-			return null;
-		Stack<Integer> path = new Stack<Integer>();
-		int x;
-		for (x = v; distTo[x] != 0; x = edgeTo[x])
-			path.push(x);
-		path.push(x);
-		return path;
-	}
-
-	// check optimality conditions for single source
-	private boolean check(Graph G, int s) {
-
-		// check that the distance of s = 0
-		if (distTo[s] != 0) {
-			System.out.println("distance of source " + s + " to itself = " + distTo[s]);
-			return false;
-		}
-
-		// check that for each edge v-w dist[w] <= dist[v] + 1
-		// provided v is reachable from s
-		for (int v = 0; v < G.V(); v++) {
-			for (int w : G.adj(v)) {
-				if (hasPathTo(v) != hasPathTo(w)) {
-					System.out.println("edge " + v + "-" + w);
-					System.out.println("hasPathTo(" + v + ") = " + hasPathTo(v));
-					System.out.println("hasPathTo(" + w + ") = " + hasPathTo(w));
-					return false;
-				}
-				if (hasPathTo(v) && (distTo[w] > distTo[v] + 1)) {
-					System.out.println("edge " + v + "-" + w);
-					System.out.println("distTo[" + v + "] = " + distTo[v]);
-					System.out.println("distTo[" + w + "] = " + distTo[w]);
-					return false;
-				}
-			}
-		}
-
-		// check that v = edgeTo[w] satisfies distTo[w] = distTo[v] + 1
-		// provided v is reachable from s
-		for (int w = 0; w < G.V(); w++) {
-			if (!hasPathTo(w) || w == s)
-				continue;
-			int v = edgeTo[w];
-			if (distTo[w] != distTo[v] + 1) {
-				System.out.println("shortest path edge " + v + "-" + w);
-				System.out.println("distTo[" + v + "] = " + distTo[v]);
-				System.out.println("distTo[" + w + "] = " + distTo[w]);
-				return false;
-			}
-		}
-
-		return true;
-	}
-
 	// throw an IllegalArgumentException unless {@code 0 <= v < V}
 	private void validateVertex(int v) {
 		int V = marked.length;
 		if (v < 0 || v >= V)
 			throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
-	}
-
-	// throw an IllegalArgumentException if vertices is null, has zero vertices,
-	// or has a vertex not between 0 and V-1
-	private void validateVertices(Iterable<Integer> vertices) {
-		if (vertices == null) {
-			throw new IllegalArgumentException("argument is null");
-		}
-		int vertexCount = 0;
-		for (Integer v : vertices) {
-			vertexCount++;
-			if (v == null) {
-				throw new IllegalArgumentException("vertex is null");
-			}
-			validateVertex(v);
-		}
-		if (vertexCount == 0) {
-			throw new IllegalArgumentException("zero vertices");
-		}
 	}
 
 }

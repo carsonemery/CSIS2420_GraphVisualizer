@@ -231,21 +231,20 @@ public class Graph {
 	 * @param algorithmName name of the algorithm to run
 	 * @param start         starting vertex
 	 * @param end           ending vertex (if applicable)
+	 * @return the path of the
 	 */
-	 public void runAlgorithm(String algorithmName, Vertex start, Vertex end) {
+	 public List<Vertex> runAlgorithm(String algorithmName, Vertex start, Vertex end) {
 	 	Algs4Adapter adapter = new Algs4Adapter(this);
 	 	switch (algorithmName) {
 	 	case "BFS":
-	 		adapter.runBFS(start, end);
-	 		break;
-	 	case "DFS":
-	 		adapter.runDFS(start, end);
-	 		break;
-	 	case "Dijkstra":
-	 		adapter.runDijkstra(start, end);
-	 		break;
-	 	// we can add more algs here
+	 		return adapter.runBFS(start, end);
+		case "DFS":
+	 		return adapter.runDFS(start, end);
+		case "Dijkstra":
+	 		return adapter.runDijkstra(start, end);
 	 	}
+	 	
+	 	return null;
 	 }
 
 	/**
