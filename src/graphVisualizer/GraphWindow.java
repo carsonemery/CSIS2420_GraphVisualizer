@@ -2,11 +2,14 @@ package graphVisualizer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.util.List;
 
 import javax.swing.AbstractButton;
@@ -146,10 +149,12 @@ public class GraphWindow extends JFrame {
 		// clear button listener
 		clearButton.addActionListener(e -> {
 			graph.clear();
-			graphCanvas.resetSelections(); 
+			graphCanvas.resetSelections();
 			statusLabel.setText("Graph cleared");
 			graphCanvas.repaint();
 		});
+
+
 
 		// ---- ASSEMBLE PANELS -----
 
