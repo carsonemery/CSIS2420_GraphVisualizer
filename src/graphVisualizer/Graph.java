@@ -15,7 +15,6 @@ public class Graph {
 	private List<Edge> edges;
 	private boolean isDirected;
 	private Iterable<Integer> sources;
-	
 
 	/**
 	 * constructor for class Graph
@@ -234,19 +233,29 @@ public class Graph {
 	 * @param end           ending vertex (if applicable)
 	 * @return the path of the
 	 */
-	 public List<Vertex> runAlgorithm(String algorithmName, Vertex start, Vertex end) {
-	 	Algs4Adapter adapter = new Algs4Adapter(this);
-	 	switch (algorithmName) {
-	 	case "BFS":
-	 		return adapter.runBFS(start, end);
-		case "DFS":
-	 		return adapter.runDFS(start, end);
+	public List<Vertex> runAlgorithmBFSandDijkstras(String algorithmName, Vertex start, Vertex end) {
+		Algs4Adapter adapter = new Algs4Adapter(this);
+		switch (algorithmName) {
+		case "BFS":
+			return adapter.runBFS(start, end);
 		case "Dijkstra":
-	 		return adapter.runDijkstra(start, end);
-	 	}
-	 	
-	 	return null;
-	 }
+			return adapter.runDijkstra(start, end);
+		}
+
+		return null;
+	}
+
+	/**
+	 * method to call DFS specifically which returns a list of paths in the form of
+	 * a list of vertices
+	 * 
+	 * @return
+	 */
+	public List<List<Vertex>> runAlgorithmDFS() {
+		Algs4Adapter adapter = new Algs4Adapter(this);
+
+		return adapter.runDFS();
+	}
 
 	/**
 	 * clears all vertices and edges from the graph

@@ -17,6 +17,7 @@ public class Algs4Adapter {
 	private Map<Vertex, Integer> distTo; // tracks distances
 
 	// DFS Variables
+	private List<List<Vertex>> cycles;
 
 	// Dijkstra Variables
 
@@ -39,12 +40,24 @@ public class Algs4Adapter {
 
 	}
 
-	public List<Vertex> runDFS(Vertex start, Vertex end) {
-		return null;
+	/**
+	 * calls DFSCycleDetector and then returns the detected cycles from the
+	 * DFSCycleDetector class
+	 * 
+	 * @return
+	 */
+	public List<List<Vertex>> runDFS() {
+		DFSCycleDetector dfsCycleDetector = new DFSCycleDetector(graph);
+
+		cycles = dfsCycleDetector.getCycles();
+
+		return cycles;
 	}
 
 	public List<Vertex> runDijkstra(Vertex start, Vertex end) {
-		return null;
+		DijkstraAdapter dijkstraAdapter = new DijkstraAdapter(graph);
+		return dijkstraAdapter.findShortestPath(start, end);
+
 	}
 
 }

@@ -44,7 +44,7 @@ public class GraphCanvas extends JPanel {
 							setStartVertex(clickedVertex);
 						} else if (endVertex == null && !clickedVertex.equals(startVertex)) {
 							setEndVertex(clickedVertex);
-							
+
 							// Only run BFS when both are set
 							if (startVertex != null && endVertex != null) {
 //								path = graph.runAlgorithm("BFS", startVertex, endVertex);
@@ -52,7 +52,6 @@ public class GraphCanvas extends JPanel {
 							}
 						}
 					}
-
 
 				}
 

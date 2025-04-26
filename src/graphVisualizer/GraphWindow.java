@@ -132,7 +132,7 @@ public class GraphWindow extends JFrame {
 			// Run the algorithm
 			if ("BFS".equals(selectedAlgorithm)) {
 				try {
-					List<Vertex> path = graph.runAlgorithm("BFS", start, end);
+					List<Vertex> path = graph.runAlgorithmBFSandDijkstras("BFS", start, end);
 
 					if (path != null) {
 						graphCanvas.setPath(path); // Update canvas with the BFS path
@@ -143,6 +143,26 @@ public class GraphWindow extends JFrame {
 				} catch (Exception ex) {
 					statusLabel.setText("Error: " + ex.getMessage());
 				}
+			}
+			
+			if ("Dijkstra".equals(selectedAlgorithm)) {
+			    try {
+			        List<Vertex> path = graph.runAlgorithmBFSandDijkstras("Dijkstra", start, end);
+			        
+			        if (path != null) {
+			            graphCanvas.setPath(path);
+			            
+			            // Get the path distance to display
+			            DijkstraAdapter dijkstraAdapter = new DijkstraAdapter(graph);
+			            double distance = dijkstraAdapter.getPathDistance(end);
+			            
+			            statusLabel.setText("Dijkstra Path found! Total weight: " + distance);
+			        } else {
+			            statusLabel.setText("No path exists between selected vertices");
+			        }
+			    } catch (Exception ex) {
+			        statusLabel.setText("Error: " + ex.getMessage());
+			    }
 			}
 
 		});
