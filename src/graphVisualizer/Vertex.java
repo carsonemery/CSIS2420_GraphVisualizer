@@ -26,19 +26,30 @@ public class Vertex {
 		this.y = y;
 		this.label = label;
 		this.radius = 15; // currently set a default size of the radius
-		
+
 		try {
 			this.value = Integer.parseInt(label);
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException("Vertex label must be a positive or valid integer (no decimal)");
 		}
-		
+
 	}
-	
+
+	/**
+	 * getter method returns the label of the vertex
+	 * 
+	 * @return
+	 */
 	public String getLabel() {
 		return label;
 	}
-	
+
+	/**
+	 * setter method set the label of the vertex and sets the value if the string
+	 * label is a valid integer
+	 * 
+	 * @param label
+	 */
 	public void setLabel(String label) {
 		try {
 			this.value = Integer.parseInt(label);
@@ -74,7 +85,6 @@ public class Vertex {
 	public int getValue() {
 		return value;
 	}
-	
 
 	/**
 	 * setter method for the field x

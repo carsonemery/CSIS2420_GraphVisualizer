@@ -140,7 +140,7 @@ public class GraphWindow extends JFrame {
 				}
 			}
 
-			if (start == null || end == null) {
+			if (selectedAlgorithm != "DFS" && start == null || end == null) {
 				statusLabel.setText("Please select start and end vertices first");
 				return;
 			}
@@ -151,7 +151,7 @@ public class GraphWindow extends JFrame {
 					List<Vertex> path = graph.runAlgorithmBFSandDijkstras("BFS", start, end);
 
 					if (path != null) {
-						graphCanvas.setPath(path); // Update canvas with the BFS path
+						graphCanvas.setPath(path);
 						statusLabel.setText("BFS Path found! Length: " + path.size());
 					} else {
 						statusLabel.setText("No path exists between selected vertices");
