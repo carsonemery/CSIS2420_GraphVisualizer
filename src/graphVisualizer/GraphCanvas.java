@@ -6,6 +6,13 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * this class creates a canvas for displaying and interacting with a graph. it
+ * supports mouse based operations for creating vertices and edges and
+ * visualizes graph algorithms BFS, DFS, and Dijkstras
+ * 
+ * @author Carson Emery & Lincoln Bunker
+ */
 public class GraphCanvas extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -24,6 +31,11 @@ public class GraphCanvas extends JPanel {
 		this.selectedAlgorithm = selectedAlgorithm;
 	}
 
+	/**
+	 * constructs a new canvas for the specified graph
+	 * 
+	 * @param graph
+	 */
 	public GraphCanvas(Graph graph) {
 		this.graph = graph;
 		setBackground(Color.WHITE);
@@ -138,6 +150,11 @@ public class GraphCanvas extends JPanel {
 		return null;
 	}
 
+	/**
+	 * paints the graph on this canvas, renders vertices, edges, and algorithm
+	 * visualizations
+	 *
+	 */
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -218,16 +235,40 @@ public class GraphCanvas extends JPanel {
 
 	}
 
-	// helper method to draw paths
+	/**
+	 * helper method to draw paths
+	 * 
+	 * @param g2d  the graphics context
+	 * @param path the path to draw as a list of vertices
+	 */
 	private void drawPath(Graphics2D g2d, List<Vertex> path) {
 		for (int i = 0; i < path.size() - 1; i++) {
 			Vertex from = path.get(i);
 			Vertex to = path.get(i + 1);
 			g2d.drawLine(from.getX(), from.getY(), to.getX(), to.getY());
+
+			// highlight the vertices in the path
+			int r = (int) from.getRadius();
+			g2d.drawOval(from.getX() - r - 2, from.getY() - r - 2, 2 * r + 4, 2 * r + 4);
+
 		}
+
+		// highlight the last vertex in the path
+		if (path.size() > 0) {
+			Vertex last = path.get(path.size() - 1);
+			int r = (int) last.getRadius();
+			g2d.drawOval(last.getX() - r - 2, last.getY() - r - 2, 2 * r + 4, 2 * r + 4);
+
+		}
+
 	}
 
-	// helper method to draw cycles
+	/**
+	 * helper method to draw cycles
+	 * 
+	 * @param g2d   the graphics context
+	 * @param cycle the cycle to draw as a list of sub lists of vertices
+	 */
 	private void drawCycle(Graphics2D g2d, List<Vertex> cycle) {
 		for (int i = 0; i < cycle.size() - 1; i++) {
 			Vertex from = cycle.get(i);
@@ -273,6 +314,7 @@ public class GraphCanvas extends JPanel {
 
 	public void setPath(List<Vertex> path) {
 		this.path = path;
+		repaint();
 	}
 
 	public void setCycles(List<List<Vertex>> cycle) {

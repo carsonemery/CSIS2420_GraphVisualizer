@@ -246,8 +246,8 @@ public class Graph {
 	}
 
 	/**
-	 * method to call DFS specifically which returns a list of paths in the form of
-	 * a list of vertices
+	 * runs DFS cycle detection algorithm on this graph by calling the Algs4Adatper
+	 * class
 	 * 
 	 * @return
 	 */

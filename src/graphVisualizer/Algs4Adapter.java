@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * adapter class that provides a bridge between the graph structure and various
+ * graph algorithms
  * 
  * @author Lincoln Bunker & Carson Emery
  */
@@ -20,6 +22,7 @@ public class Algs4Adapter {
 	private List<List<Vertex>> cycles;
 
 	// Dijkstra Variables
+	
 
 	public Algs4Adapter(Graph graph) {
 		this.graph = graph;
