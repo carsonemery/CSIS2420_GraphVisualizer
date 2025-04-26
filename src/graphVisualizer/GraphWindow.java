@@ -149,16 +149,15 @@ public class GraphWindow extends JFrame {
 
 		// clear button listener
 		clearButton.addActionListener(e -> {
-			graph.clear();
-			graphCanvas.resetSelections();
-			statusLabel.setText("Graph cleared");
-			graphCanvas.repaint();
+		    graph.getVertices().clear();
+		    graph.getEdges().clear();
+		    graphCanvas.setStartVertex(null);
+		    graphCanvas.setEndVertex(null);
+		    graphCanvas.setPath(null);
+		    graphCanvas.repaint();
 		});
-
-
-
+		
 		// ---- ASSEMBLE PANELS -----
-
 		// add components to mode panel
 		modePanel.add(modeToggle);
 
