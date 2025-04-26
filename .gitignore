@@ -8,6 +8,8 @@
 
 # Ignore JAR files
 *.jar
+# But include the required library
+!lib/algs4.jar
 
 # Ignore log files
 *.log
