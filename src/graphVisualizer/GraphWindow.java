@@ -105,7 +105,7 @@ public class GraphWindow extends JFrame {
 			boolean isSelectionMode = modeToggle.isSelected();
 			if (isSelectionMode) {
 				modeToggle.setText("Selection Mode");
-				statusLabel.setText("Select start and end vertices");
+				statusLabel.setText("Double-click to select start and end vertices");
 				// implement in graphCanvas
 				graphCanvas.setSelectionMode(true);
 			} else {
