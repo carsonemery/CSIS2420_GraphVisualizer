@@ -42,12 +42,17 @@ public class GraphCanvas extends JPanel {
 					if (clickedVertex != null) {
 						if (startVertex == null) {
 							setStartVertex(clickedVertex);
-						}
-
-						if (startVertex != null && endVertex == null) {
+						} else if (endVertex == null && !clickedVertex.equals(startVertex)) {
 							setEndVertex(clickedVertex);
+							
+							// Only run BFS when both are set
+							if (startVertex != null && endVertex != null) {
+//								path = graph.runAlgorithm("BFS", startVertex, endVertex);
+								repaint();
+							}
 						}
 					}
+
 
 				}
 
@@ -145,6 +150,17 @@ public class GraphCanvas extends JPanel {
 		}
 
 		// highlight selected vertices
+		// Highlight selected vertices
+		if (startVertex != null) {
+			g.setColor(Color.RED);
+			int r = (int) startVertex.getRadius();
+			g.drawOval(startVertex.getX() - r, startVertex.getY() - r, 2 * r, 2 * r);
+		}
+		if (endVertex != null) {
+			g.setColor(Color.RED);
+			int r = (int) endVertex.getRadius();
+			g.drawOval(endVertex.getX() - r, endVertex.getY() - r, 2 * r, 2 * r);
+		}
 
 	}
 
