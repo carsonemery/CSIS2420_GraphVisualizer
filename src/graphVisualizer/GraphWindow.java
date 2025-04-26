@@ -144,39 +144,58 @@ public class GraphWindow extends JFrame {
 					statusLabel.setText("Error: " + ex.getMessage());
 				}
 			}
-			
+
 			if ("Dijkstra".equals(selectedAlgorithm)) {
-			    try {
-			        List<Vertex> path = graph.runAlgorithmBFSandDijkstras("Dijkstra", start, end);
-			        
-			        if (path != null) {
-			            graphCanvas.setPath(path);
-			            
-			            // Get the path distance to display
-			            DijkstraAdapter dijkstraAdapter = new DijkstraAdapter(graph);
-			            double distance = dijkstraAdapter.getPathDistance(end);
-			            
-			            statusLabel.setText("Dijkstra Path found! Total weight: " + distance);
-			        } else {
-			            statusLabel.setText("No path exists between selected vertices");
-			        }
-			    } catch (Exception ex) {
-			        statusLabel.setText("Error: " + ex.getMessage());
-			    }
+				try {
+					List<Vertex> path = graph.runAlgorithmBFSandDijkstras("Dijkstra", start, end);
+
+					if (path != null) {
+						graphCanvas.setPath(path);
+
+						// Get the path distance to display
+						DijkstraAdapter dijkstraAdapter = new DijkstraAdapter(graph);
+						double distance = dijkstraAdapter.getPathDistance(end);
+
+						statusLabel.setText("Dijkstra Path found! Total weight: " + distance);
+					} else {
+						statusLabel.setText("No path exists between selected vertices");
+					}
+				} catch (Exception ex) {
+					statusLabel.setText("Error: " + ex.getMessage());
+				}
+			}
+
+			if ("DFS".equals(selectedAlgorithm)) {
+				try {
+					List<List<Vertex>> cycle = graph.runAlgorithmDFS();
+
+					if (cycle != null) {
+						graphCanvas.setCycles(cycle);
+
+						// get the cycle to display
+						DFSCycleDetector dfsCycleDetector = new DFSCycleDetector(graph);
+
+						statusLabel.setText("Cycles found!");
+					} else {
+						statusLabel.setText("No cycles exist in the graph");
+					}
+				} catch (Exception ex) {
+					statusLabel.setText("Error: " + ex.getMessage());
+				}
 			}
 
 		});
 
 		// clear button listener
 		clearButton.addActionListener(e -> {
-		    graph.getVertices().clear();
-		    graph.getEdges().clear();
-		    graphCanvas.setStartVertex(null);
-		    graphCanvas.setEndVertex(null);
-		    graphCanvas.setPath(null);
-		    graphCanvas.repaint();
+			graph.getVertices().clear();
+			graph.getEdges().clear();
+			graphCanvas.setStartVertex(null);
+			graphCanvas.setEndVertex(null);
+			graphCanvas.setPath(null);
+			graphCanvas.repaint();
 		});
-		
+
 		// ---- ASSEMBLE PANELS -----
 		// add components to mode panel
 		modePanel.add(modeToggle);

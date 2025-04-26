@@ -15,6 +15,9 @@ public class GraphCanvas extends JPanel {
 	private boolean selectionMode = false;
 	private Vertex startVertex;
 	private Vertex endVertex;
+	private List<List<Vertex>> cycles;
+	private Color[] cycleColors = { Color.RED, Color.GREEN, Color.ORANGE, Color.MAGENTA, Color.CYAN, Color.YELLOW,
+			Color.WHITE };
 
 	public GraphCanvas(Graph graph) {
 		this.graph = graph;
@@ -160,6 +163,39 @@ public class GraphCanvas extends JPanel {
 			g.drawOval(endVertex.getX() - r, endVertex.getY() - r, 2 * r, 2 * r);
 		}
 
+		// draw cycles - making each cycle a different color by using an array of colors
+		if (cycles != null) {
+
+			// for each cycle in the list of cycles
+			for (int i = 0; i < cycles.size(); i++) {
+				// set a new color for each cycle
+				g.setColor(cycleColors[i % cycleColors.length]);
+
+				List<Vertex> currentCycle = cycles.get(i);
+
+				// draw lines highlighting each edge and vertex in a given cycle
+				for (int j = 0; j < currentCycle.size() - 1; j++) {
+
+					Vertex from = currentCycle.get(j);
+					Vertex to = currentCycle.get(j + 1);
+					g.drawLine(from.getX(), from.getY(), to.getX(), to.getY());
+
+					// highlight the "from" vertex
+					int r = (int) from.getRadius();
+					g.drawOval(from.getX() - r, from.getY() - r, 2 * r, 2 * r);
+
+					// if this is the last iteration, also highlight the "to" vertex
+					if (j == currentCycle.size() - 2) {
+						r = (int) to.getRadius();
+						g.drawOval(to.getX() - r, to.getY() - r, 2 * r, 2 * r);
+					}
+
+				}
+
+			}
+
+		}
+
 	}
 
 	public void setSelectionMode(boolean mode) {
@@ -189,6 +225,14 @@ public class GraphCanvas extends JPanel {
 
 	public void setPath(List<Vertex> path) {
 		this.path = path;
+	}
+
+	public void setCycles(List<List<Vertex>> cycle) {
+		this.cycles = cycle;
+	}
+
+	public List<List<Vertex>> getCycles() {
+		return this.cycles;
 	}
 
 }
