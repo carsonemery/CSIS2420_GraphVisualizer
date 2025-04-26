@@ -18,6 +18,11 @@ public class GraphCanvas extends JPanel {
 	private List<List<Vertex>> cycles;
 	private Color[] cycleColors = { Color.RED, Color.GREEN, Color.ORANGE, Color.MAGENTA, Color.CYAN, Color.YELLOW,
 			Color.WHITE };
+	private String selectedAlgorithm; // used to determine whether or not to have the pop up for edge weights.
+
+	public void setSelectedAlgorithm(String selectedAlgorithm) {
+		this.selectedAlgorithm = selectedAlgorithm;
+	}
 
 	public GraphCanvas(Graph graph) {
 		this.graph = graph;
@@ -37,7 +42,7 @@ public class GraphCanvas extends JPanel {
 							graph.addVertex(vertex);
 							repaint();
 						}
-					}
+					} 
 				} else {
 
 					// set the start and end vertices
@@ -67,16 +72,31 @@ public class GraphCanvas extends JPanel {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				System.out.println("mouseReleased called, selectedAlgorithm = " + selectedAlgorithm);
 				Vertex target = getVertexAtPosition(e.getX(), e.getY());
 				if (selectedVertex != null && target != null && selectedVertex != target) {
 					Edge edge = new Edge(selectedVertex, target, 1); // default weight
 					graph.getEdges().add(edge);
+				
 
 					if (!graph.isDirected()) {
 						Edge reverse = new Edge(target, selectedVertex, 1);
 						edge.setReverseOf(reverse);
 						graph.getEdges().add(reverse);
 					}
+				//if the selection mode dikstra is selected, show another input dialog when edges are connected
+				//this will be for edge weights, will display the number either on or above the edge line
+				if ("Dijkstra".equals(selectedAlgorithm)) {
+					String label = JOptionPane.showInputDialog("Enter edge weight of type double:");
+				    if (label != null && !label.trim().isEmpty()) {
+				        try {
+				            double weight = Double.parseDouble(label.trim());
+				            edge.setWeight(weight);
+				        } catch (NumberFormatException ex) {
+				            JOptionPane.showMessageDialog(null, "Invalid input. Please enter a valid number for the edge weight.");
+				        }
+				    }
+				}
 
 					repaint();
 				}
@@ -135,6 +155,16 @@ public class GraphCanvas extends JPanel {
 			Vertex to = edge.getTo();
 			g.setColor(Color.BLACK);
 			g.drawLine(from.getX(), from.getY(), to.getX(), to.getY());
+			
+			if ("Dijkstra".equals(selectedAlgorithm)) {
+				int midX = (from.getX() + to.getX()) / 2;
+				int midY = (from.getY() + to.getY()) / 2;
+				
+				// Draw the edge weight slightly offset so it doesn't sit exactly on the line
+				g.setColor(Color.BLUE); // (Optional) Different color for weight text
+				String weightStr = String.valueOf(edge.getWeight());
+				g.drawString(weightStr, midX + 5, midY - 5);	
+			}
 		}
 
 		// draw vertices
