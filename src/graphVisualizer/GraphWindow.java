@@ -124,6 +124,22 @@ public class GraphWindow extends JFrame {
 			Vertex start = graphCanvas.getStartVertex();
 			Vertex end = graphCanvas.getEndVertex();
 
+			if ("DFS".equals(selectedAlgorithm)) {
+				try {
+					List<List<Vertex>> cycle = graph.runAlgorithmDFS();
+
+					if (cycle != null) {
+						graphCanvas.setCycles(cycle);
+
+						statusLabel.setText("Cycles found!");
+					} else {
+						statusLabel.setText("No cycles exist in the graph");
+					}
+				} catch (Exception ex) {
+					statusLabel.setText("Error: " + ex.getMessage());
+				}
+			}
+
 			if (start == null || end == null) {
 				statusLabel.setText("Please select start and end vertices first");
 				return;
@@ -165,25 +181,6 @@ public class GraphWindow extends JFrame {
 				}
 			}
 
-			if ("DFS".equals(selectedAlgorithm)) {
-				try {
-					List<List<Vertex>> cycle = graph.runAlgorithmDFS();
-
-					if (cycle != null) {
-						graphCanvas.setCycles(cycle);
-
-						// get the cycle to display
-						DFSCycleDetector dfsCycleDetector = new DFSCycleDetector(graph);
-
-						statusLabel.setText("Cycles found!");
-					} else {
-						statusLabel.setText("No cycles exist in the graph");
-					}
-				} catch (Exception ex) {
-					statusLabel.setText("Error: " + ex.getMessage());
-				}
-			}
-
 		});
 
 		// clear button listener
@@ -193,6 +190,7 @@ public class GraphWindow extends JFrame {
 			graphCanvas.setStartVertex(null);
 			graphCanvas.setEndVertex(null);
 			graphCanvas.setPath(null);
+			graphCanvas.setCycles(null);
 			graphCanvas.repaint();
 		});
 

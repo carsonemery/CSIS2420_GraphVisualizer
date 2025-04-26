@@ -122,7 +122,14 @@ public class GraphCanvas extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		// Draw edges
+		// cast to graphics2D for better rendering
+		Graphics2D g2d = (Graphics2D) g;
+
+		// enable antialiasing
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		// draw edges
+		g2d.setStroke(new BasicStroke(1.5f));
 		for (Edge edge : graph.getEdges()) {
 			Vertex from = edge.getFrom();
 			Vertex to = edge.getTo();
@@ -130,72 +137,83 @@ public class GraphCanvas extends JPanel {
 			g.drawLine(from.getX(), from.getY(), to.getX(), to.getY());
 		}
 
-		// Draw vertices
+		// draw vertices
 		for (Vertex v : graph.getVertices()) {
-			g.setColor(Color.BLUE);
+			g2d.setColor(Color.BLUE);
 			int r = (int) v.getRadius();
 			g.fillOval(v.getX() - r, v.getY() - r, 2 * r, 2 * r);
 
-			g.setColor(Color.WHITE);
-			g.drawString(v.getLabel(), v.getX() - r / 2, v.getY() + 4);
+			// draw a slight boarder
+			g.setColor(Color.DARK_GRAY);
+			g2d.drawOval(v.getX() - r, v.getY() - r, 2 * r, 2 * r);
 
+			// draw label
+			g2d.setColor(Color.WHITE);
+			FontMetrics fm = g2d.getFontMetrics();
+			String label = v.getLabel();
+			int textWidth = fm.stringWidth(label);
+			g2d.drawString(label, v.getX() - textWidth / 2, v.getY() + fm.getAscent() / 2);
 		}
 
-		// Highlight BFS path if available
+		// draw paths
 		if (path != null) {
-			g.setColor(Color.RED); // Use red to highlight the path
-			for (int i = 0; i < path.size() - 1; i++) {
-				Vertex from = path.get(i);
-				Vertex to = path.get(i + 1);
-				g.drawLine(from.getX(), from.getY(), to.getX(), to.getY());
+			g2d.setColor(Color.RED);
+			g2d.setStroke(new BasicStroke(3.0f));
+			drawPath(g2d, path);
+		}
+
+		// draw cycles
+		if (cycles != null) {
+			for (int i = 0; i < cycles.size(); i++) {
+				g2d.setColor(cycleColors[i % cycleColors.length]);
+				g2d.setStroke(new BasicStroke(3.0f));
+				List<Vertex> currentCycle = cycles.get(i);
+				drawCycle(g2d, currentCycle);
 			}
 		}
 
 		// Highlight selected vertices
 		if (startVertex != null) {
-			g.setColor(Color.RED);
+			g2d.setColor(Color.RED);
+			g2d.setStroke(new BasicStroke(2.0f));
 			int r = (int) startVertex.getRadius();
 			g.drawOval(startVertex.getX() - r, startVertex.getY() - r, 2 * r, 2 * r);
 		}
 		if (endVertex != null) {
-			g.setColor(Color.RED);
+			g2d.setColor(Color.RED);
+			g2d.setStroke(new BasicStroke(2.0f));
 			int r = (int) endVertex.getRadius();
 			g.drawOval(endVertex.getX() - r, endVertex.getY() - r, 2 * r, 2 * r);
 		}
 
-		// draw cycles - making each cycle a different color by using an array of colors
-		if (cycles != null) {
+	}
 
-			// for each cycle in the list of cycles
-			for (int i = 0; i < cycles.size(); i++) {
-				// set a new color for each cycle
-				g.setColor(cycleColors[i % cycleColors.length]);
-
-				List<Vertex> currentCycle = cycles.get(i);
-
-				// draw lines highlighting each edge and vertex in a given cycle
-				for (int j = 0; j < currentCycle.size() - 1; j++) {
-
-					Vertex from = currentCycle.get(j);
-					Vertex to = currentCycle.get(j + 1);
-					g.drawLine(from.getX(), from.getY(), to.getX(), to.getY());
-
-					// highlight the "from" vertex
-					int r = (int) from.getRadius();
-					g.drawOval(from.getX() - r, from.getY() - r, 2 * r, 2 * r);
-
-					// if this is the last iteration, also highlight the "to" vertex
-					if (j == currentCycle.size() - 2) {
-						r = (int) to.getRadius();
-						g.drawOval(to.getX() - r, to.getY() - r, 2 * r, 2 * r);
-					}
-
-				}
-
-			}
-
+	// helper method to draw paths
+	private void drawPath(Graphics2D g2d, List<Vertex> path) {
+		for (int i = 0; i < path.size() - 1; i++) {
+			Vertex from = path.get(i);
+			Vertex to = path.get(i + 1);
+			g2d.drawLine(from.getX(), from.getY(), to.getX(), to.getY());
 		}
+	}
 
+	// helper method to draw cycles
+	private void drawCycle(Graphics2D g2d, List<Vertex> cycle) {
+		for (int i = 0; i < cycle.size() - 1; i++) {
+			Vertex from = cycle.get(i);
+			Vertex to = cycle.get(i + 1);
+			g2d.drawLine(from.getX(), from.getY(), to.getX(), to.getY());
+
+			// Highlight vertices in the cycle
+			int r = (int) from.getRadius();
+			g2d.drawOval(from.getX() - r - 2, from.getY() - r - 2, 2 * r + 4, 2 * r + 4);
+
+			// If this is the last edge, also highlight the last vertex
+			if (i == cycle.size() - 2) {
+				r = (int) to.getRadius();
+				g2d.drawOval(to.getX() - r - 2, to.getY() - r - 2, 2 * r + 4, 2 * r + 4);
+			}
+		}
 	}
 
 	public void setSelectionMode(boolean mode) {
