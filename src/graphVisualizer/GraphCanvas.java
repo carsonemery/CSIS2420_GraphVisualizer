@@ -149,7 +149,6 @@ public class GraphCanvas extends JPanel {
 			}
 		}
 
-		// highlight selected vertices
 		// Highlight selected vertices
 		if (startVertex != null) {
 			g.setColor(Color.RED);
