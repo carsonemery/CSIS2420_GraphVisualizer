@@ -134,6 +134,16 @@ public class GraphCanvas extends JPanel {
 
 		}
 
+		// Highlight BFS path if available
+		if (path != null) {
+			g.setColor(Color.RED); // Use red to highlight the path
+			for (int i = 0; i < path.size() - 1; i++) {
+				Vertex from = path.get(i);
+				Vertex to = path.get(i + 1);
+				g.drawLine(from.getX(), from.getY(), to.getX(), to.getY());
+			}
+		}
+
 		// highlight selected vertices
 
 	}

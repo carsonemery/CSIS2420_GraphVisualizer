@@ -130,20 +130,21 @@ public class GraphWindow extends JFrame {
 			}
 
 			// Run the algorithm
-			try {
-				Graph graph = new Graph();
+			if ("BFS".equals(selectedAlgorithm)) {
+				try {
+					List<Vertex> path = graph.runAlgorithm("BFS", start, end);
 
-				List<Vertex> path = graph.runAlgorithm(selectedAlgorithm, start, end);
-
-				if (path != null) {
-					graphCanvas.setPath(path);
-					statusLabel.setText("Path found! Length: " + path.size());
-				} else {
-					statusLabel.setText("No path exists between selected vertices");
+					if (path != null) {
+						graphCanvas.setPath(path); // Update canvas with the BFS path
+						statusLabel.setText("BFS Path found! Length: " + path.size());
+					} else {
+						statusLabel.setText("No path exists between selected vertices");
+					}
+				} catch (Exception ex) {
+					statusLabel.setText("Error: " + ex.getMessage());
 				}
-			} catch (Exception ex) {
-				statusLabel.setText("Error: " + ex.getMessage());
 			}
+
 		});
 
 		// clear button listener
