@@ -29,6 +29,7 @@ public class GraphWindow extends JFrame {
 	private JPanel contentPane;
 	private Graph graph = new Graph(false);
 	private GraphCanvas graphCanvas;
+	 
 
 	/**
 	 * Create the frame.
@@ -124,47 +125,59 @@ public class GraphWindow extends JFrame {
 			Vertex start = graphCanvas.getStartVertex();
 			Vertex end = graphCanvas.getEndVertex();
 
-			if ("DFS".equals(selectedAlgorithm)) {
-				try {
-					List<List<Vertex>> cycle = graph.runAlgorithmDFS();
-
-					if (cycle != null) {
-						graphCanvas.setCycles(cycle);
-
-						statusLabel.setText("Cycles found!");
-					} else {
-						statusLabel.setText("No cycles exist in the graph");
-					}
-				} catch (Exception ex) {
-					statusLabel.setText("Error: " + ex.getMessage());
-				}
-			}
-
 			if (selectedAlgorithm != "DFS" && start == null || end == null) {
 				statusLabel.setText("Please select start and end vertices first");
 				return;
 			}
 
-			// Run the algorithm
+			// run DFS
+			if ("DFS".equals(selectedAlgorithm)) {
+				try {
+
+					// clear previous results
+					graphCanvas.setPath(null);
+
+					List<List<Vertex>> cycles = graph.runAlgorithmDFS();
+
+					if (cycles != null && !cycles.isEmpty()) {
+						graphCanvas.setCycles(cycles);
+						statusLabel.setText("Found " + cycles.size() + "cycle(s)!");
+					} else {
+						graphCanvas.setCycles(null);
+						statusLabel.setText("No cycles exist in the graph");
+					}
+					repaint();
+					return;
+
+				} catch (Exception ex) {
+					statusLabel.setText("Error: " + ex.getMessage());
+					return;
+				}
+			}
+
+			// run BFS or Dijkstras
 			if ("BFS".equals(selectedAlgorithm)) {
 				try {
-					List<Vertex> path = graph.runAlgorithmBFSandDijkstras("BFS", start, end);
+					// Clear DFS results
+					graphCanvas.setCycles(null);
 
+					List<Vertex> path = graph.runAlgorithmBFSandDijkstras("BFS", start, end);
 					if (path != null) {
 						graphCanvas.setPath(path);
 						statusLabel.setText("BFS Path found! Length: " + path.size());
 					} else {
+						graphCanvas.setPath(null);
 						statusLabel.setText("No path exists between selected vertices");
 					}
 				} catch (Exception ex) {
 					statusLabel.setText("Error: " + ex.getMessage());
 				}
-			}
-
-			if ("Dijkstra".equals(selectedAlgorithm)) {
+			} else if ("Dijkstra".equals(selectedAlgorithm)) {
 				try {
-					List<Vertex> path = graph.runAlgorithmBFSandDijkstras("Dijkstra", start, end);
+					// Clear DFS results
+					graphCanvas.setCycles(null);
 
+					List<Vertex> path = graph.runAlgorithmBFSandDijkstras("Dijkstra", start, end);
 					if (path != null) {
 						graphCanvas.setPath(path);
 
@@ -174,13 +187,13 @@ public class GraphWindow extends JFrame {
 
 						statusLabel.setText("Dijkstra Path found! Total weight: " + distance);
 					} else {
+						graphCanvas.setPath(null);
 						statusLabel.setText("No path exists between selected vertices");
 					}
 				} catch (Exception ex) {
 					statusLabel.setText("Error: " + ex.getMessage());
 				}
 			}
-
 		});
 
 		// clear button listener
@@ -214,6 +227,12 @@ public class GraphWindow extends JFrame {
 		// add to frame
 		add(mainPanel);
 		setVisible(true);
+		
+		
 	}
+	
+//	public String getSelectedAlgorithm() {
+//		return (String) 
+//	}
 
 }

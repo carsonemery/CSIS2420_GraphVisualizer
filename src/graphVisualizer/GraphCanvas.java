@@ -52,6 +52,18 @@ public class GraphCanvas extends JPanel {
 					}
 				} else {
 
+					// Get selected algorithm from parent window (you'll need to add a way to access
+					// this)
+//					GraphWindow window = new GraphWindow();
+//					String selectedAlgorithm = window.getSelectedAlgorithm();
+//					
+//					// For DFS, no vertices need to be selected
+//					if ("DFS".equals(selectedAlgorithm)) {
+//						// show a message that no vertex selection is required for finding cycles
+//						statusLabel.setText("DFS doesn't require vertex selection. Just click Run Algorithm.");
+//						return;
+//					}
+
 					// set the start and end vertices
 					Vertex clickedVertex = getVertexAtPosition(e.getX(), e.getY());
 					if (clickedVertex != null) {
