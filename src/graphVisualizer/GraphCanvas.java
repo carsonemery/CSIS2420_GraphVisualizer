@@ -25,6 +25,9 @@ public class GraphCanvas extends JPanel {
 	private List<List<Vertex>> cycles;
 	private Color[] cycleColors = { Color.RED, Color.GREEN, Color.ORANGE, Color.MAGENTA, Color.CYAN, Color.YELLOW };
 	private String selectedAlgorithm; // used to determine whether or not to have the pop up for edge weights.
+	// Add fields to track right-clicked elements
+	private Vertex rightClickedVertex;
+	private Edge rightClickedEdge;
 
 	public void setSelectedAlgorithm(String selectedAlgorithm) {
 		this.selectedAlgorithm = selectedAlgorithm;
@@ -38,6 +41,27 @@ public class GraphCanvas extends JPanel {
 	public GraphCanvas(Graph graph) {
 		this.graph = graph;
 		setBackground(Color.WHITE);
+
+		// Create popup menu for right-click actions
+		JPopupMenu popupMenu = new JPopupMenu();
+		JMenuItem removeItem = new JMenuItem("Remove");
+		removeItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (rightClickedVertex != null) {
+					// Remove vertex
+					graph.removeVertex(rightClickedVertex);
+					rightClickedVertex = null;
+					repaint();
+				} else if (rightClickedEdge != null) {
+					// Remove edge
+					graph.removeEdge(rightClickedEdge);
+					rightClickedEdge = null;
+					repaint();
+				}
+			}
+		});
+		popupMenu.add(removeItem);
 
 		// Mouse listener for click interactions
 		addMouseListener(new MouseAdapter() {
