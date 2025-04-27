@@ -23,7 +23,7 @@ public class GraphCanvas extends JPanel {
 	private Vertex startVertex;
 	private Vertex endVertex;
 	private List<List<Vertex>> cycles;
-	private Color[] cycleColors = { Color.RED, Color.GREEN, Color.ORANGE, Color.MAGENTA, Color.CYAN, Color.YELLOW};
+	private Color[] cycleColors = { Color.RED, Color.GREEN, Color.ORANGE, Color.MAGENTA, Color.CYAN, Color.YELLOW };
 	private String selectedAlgorithm; // used to determine whether or not to have the pop up for edge weights.
 
 	public void setSelectedAlgorithm(String selectedAlgorithm) {
@@ -49,21 +49,20 @@ public class GraphCanvas extends JPanel {
 					if (e.getClickCount() == 2) {
 						String label = JOptionPane.showInputDialog("Enter vertex label:");
 						if (label != null && !label.trim().isEmpty()) {
-							
-								Vertex vertex = new Vertex(e.getX(), e.getY(), label);
-								graph.addVertex(vertex);
-								repaint();
-							
-							
+
+							Vertex vertex = new Vertex(e.getX(), e.getY(), label);
+							graph.addVertex(vertex);
+							repaint();
+
 						}
-					} 
+					}
 				} else {
 
 					// For DFS, no vertices need to be selected
 					if ("DFS".equals(selectedAlgorithm)) {
-				        // Skip vertex selection for DFS
-				        return;
-				    }
+						// Skip vertex selection for DFS
+						return;
+					}
 
 					// set the start and end vertices
 					Vertex clickedVertex = getVertexAtPosition(e.getX(), e.getY());
@@ -97,26 +96,28 @@ public class GraphCanvas extends JPanel {
 				if (selectedVertex != null && target != null && selectedVertex != target) {
 					Edge edge = new Edge(selectedVertex, target, 1); // default weight
 					graph.getEdges().add(edge);
-				
 
 					if (!graph.isDirected()) {
 						Edge reverse = new Edge(target, selectedVertex, 1);
 						edge.setReverseOf(reverse);
 						graph.getEdges().add(reverse);
 					}
-				//if the selection mode dikstra is selected, show another input dialog when edges are connected
-				//this will be for edge weights, will display the number either on or above the edge line
-				if ("Dijkstra".equals(selectedAlgorithm)) {
-					String label = JOptionPane.showInputDialog("Enter edge weight of type double:");
-				    if (label != null && !label.trim().isEmpty()) {
-				        try {
-				            double weight = Double.parseDouble(label.trim());
-				            edge.setWeight(weight);
-				        } catch (NumberFormatException ex) {
-				            JOptionPane.showMessageDialog(null, "Invalid input. Please enter a valid number for the edge weight.");
-				        }
-				    }
-				}
+					// if the selection mode dikstra is selected, show another input dialog when
+					// edges are connected
+					// this will be for edge weights, will display the number either on or above the
+					// edge line
+					if ("Dijkstra".equals(selectedAlgorithm)) {
+						String label = JOptionPane.showInputDialog("Enter edge weight of type double:");
+						if (label != null && !label.trim().isEmpty()) {
+							try {
+								double weight = Double.parseDouble(label.trim());
+								edge.setWeight(weight);
+							} catch (NumberFormatException ex) {
+								JOptionPane.showMessageDialog(null,
+										"Invalid input. Please enter a valid number for the edge weight.");
+							}
+						}
+					}
 
 					repaint();
 				}
@@ -180,15 +181,15 @@ public class GraphCanvas extends JPanel {
 			Vertex to = edge.getTo();
 			g.setColor(Color.BLACK);
 			g.drawLine(from.getX(), from.getY(), to.getX(), to.getY());
-			
+
 			if ("Dijkstra".equals(selectedAlgorithm)) {
 				int midX = (from.getX() + to.getX()) / 2;
 				int midY = (from.getY() + to.getY()) / 2;
-				
+
 				// Draw the edge weight slightly offset so it doesn't sit exactly on the line
 				g.setColor(Color.BLUE); // (Optional) Different color for weight text
 				String weightStr = String.valueOf(edge.getWeight());
-				g.drawString(weightStr, midX + 5, midY - 5);	
+				g.drawString(weightStr, midX + 5, midY - 5);
 			}
 		}
 
@@ -278,6 +279,12 @@ public class GraphCanvas extends JPanel {
 	 * @param cycle the cycle to draw as a list of sub lists of vertices
 	 */
 	private void drawCycle(Graphics2D g2d, List<Vertex> cycle) {
+		// We need at least 3 vertices for a cycle
+		if (cycle.size() < 3) {
+			return;
+		}
+
+		// Draw edges that form the cycle
 		for (int i = 0; i < cycle.size() - 1; i++) {
 			Vertex from = cycle.get(i);
 			Vertex to = cycle.get(i + 1);
@@ -286,13 +293,16 @@ public class GraphCanvas extends JPanel {
 			// Highlight vertices in the cycle
 			int r = (int) from.getRadius();
 			g2d.drawOval(from.getX() - r - 2, from.getY() - r - 2, 2 * r + 4, 2 * r + 4);
-
-			// If this is the last edge, also highlight the last vertex
-			if (i == cycle.size() - 2) {
-				r = (int) to.getRadius();
-				g2d.drawOval(to.getX() - r - 2, to.getY() - r - 2, 2 * r + 4, 2 * r + 4);
-			}
 		}
+
+		// Draw the closing edge from last vertex back to first
+		Vertex last = cycle.get(cycle.size() - 1);
+		Vertex first = cycle.get(0);
+		g2d.drawLine(last.getX(), last.getY(), first.getX(), first.getY());
+
+		// Highlight the last vertex
+		int r = (int) last.getRadius();
+		g2d.drawOval(last.getX() - r - 2, last.getY() - r - 2, 2 * r + 4, 2 * r + 4);
 	}
 
 	public void setSelectionMode(boolean mode) {
