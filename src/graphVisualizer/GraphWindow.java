@@ -169,19 +169,24 @@ public class GraphWindow extends JFrame {
 			if ("Dijkstra".equals(selectedAlgorithm)) {
 				try {
 					List<Vertex> path = graph.runAlgorithmBFSandDijkstras("Dijkstra", start, end);
+		            System.out.print("Path: ");
+		            for (Vertex vertex : path) {
+		                System.out.print(vertex.getLabel() + " ");  // Assuming Vertex has a 'getName()' method
+		            }
 
 					if (path != null) {
 						graphCanvas.setPath(path);
 
 						// Get the path distance to display
 						DijkstraAdapter dijkstraAdapter = new DijkstraAdapter(graph);
-						double distance = dijkstraAdapter.getPathDistance(end);
+//						double distance = dijkstraAdapter.weightFinal();
 
-						statusLabel.setText("Dijkstra Path found! Total weight: " + distance);
+						statusLabel.setText("Dijkstra Path found!");
 					} else {
 						statusLabel.setText("No cycle exists between selected vertices");
 					}
 				} catch (Exception ex) {
+					ex.printStackTrace();
 					statusLabel.setText("Error: " + ex.getMessage());
 				}
 			}
