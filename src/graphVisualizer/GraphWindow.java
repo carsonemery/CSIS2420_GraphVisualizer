@@ -29,7 +29,6 @@ public class GraphWindow extends JFrame {
 	private JPanel contentPane;
 	private Graph graph = new Graph(false);
 	private GraphCanvas graphCanvas;
-	 
 
 	/**
 	 * Create the frame.
@@ -72,8 +71,12 @@ public class GraphWindow extends JFrame {
 
 		// algorithm selection dropdown
 		JPanel algoPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		String[] algorithms = { "BFS", "DFS", "Dijkstra", "Topological Sort" };
+		String[] algorithms = { "BFS", "DFS", "Dijkstra" };
 		JComboBox<String> algorithmDropdown = new JComboBox<>(algorithms);
+		algorithmDropdown.addItemListener(e -> {
+			String selectedAlgorithm = (String) algorithmDropdown.getSelectedItem();
+			graphCanvas.setSelectedAlgorithm(selectedAlgorithm);
+		});
 		algoPanel.add(new JLabel("Choose an algorithm:"));
 		algoPanel.add(algorithmDropdown);
 
@@ -120,12 +123,13 @@ public class GraphWindow extends JFrame {
 		runButton.addActionListener(e -> {
 			// Get selected algorithm
 			String selectedAlgorithm = (String) algorithmDropdown.getSelectedItem();
+			graphCanvas.setSelectedAlgorithm(selectedAlgorithm);
 
 			// graphCanvas methods
 			Vertex start = graphCanvas.getStartVertex();
 			Vertex end = graphCanvas.getEndVertex();
 
-			if (selectedAlgorithm != "DFS" && start == null || end == null) {
+			if (selectedAlgorithm != "DFS" && (start == null || end == null)) {
 				statusLabel.setText("Please select start and end vertices first");
 				return;
 			}
@@ -154,6 +158,8 @@ public class GraphWindow extends JFrame {
 					return;
 				}
 			}
+			
+			
 
 			// run BFS or Dijkstras
 			if ("BFS".equals(selectedAlgorithm)) {
@@ -189,6 +195,8 @@ public class GraphWindow extends JFrame {
 					} else {
 						graphCanvas.setPath(null);
 						statusLabel.setText("No path exists between selected vertices");
+
+						statusLabel.setText("No cycle exists between selected vertices");
 					}
 				} catch (Exception ex) {
 					statusLabel.setText("Error: " + ex.getMessage());
@@ -227,10 +235,9 @@ public class GraphWindow extends JFrame {
 		// add to frame
 		add(mainPanel);
 		setVisible(true);
-		
-		
+
 	}
-	
+
 //	public String getSelectedAlgorithm() {
 //		return (String) 
 //	}

@@ -1,6 +1,7 @@
 package graphVisualizer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -91,10 +92,12 @@ public class DijkstraAdapter {
 		visited = new boolean[n];
 
 		// Set all distances to infinity initially
-		for (int v = 0; v < n; v++) {
-			distTo[v] = Double.POSITIVE_INFINITY;
-		}
+		Arrays.fill(distTo, Double.POSITIVE_INFINITY);
 		distTo[start] = 0.0;
+//		for (int v = 0; v < n; v++) {
+//			distTo[v] = Double.POSITIVE_INFINITY;
+//		}
+		System.out.println("Initial distTo: " + Arrays.toString(distTo));
 
 		// Create priority queue with custom comparator to order by distance
 		PriorityQueue<Integer> pq = new PriorityQueue<>((v, w) -> Double.compare(distTo[v], distTo[w]));
@@ -117,6 +120,7 @@ public class DijkstraAdapter {
 
 				// Edge relaxation: if we found a shorter path to w through v
 				double weight = e.getWeight();
+				System.out.println(weight);
 				if (distTo[w] > distTo[v] + weight) {
 					distTo[w] = distTo[v] + weight;
 					edgeTo[w] = v;
