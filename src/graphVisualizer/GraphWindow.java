@@ -180,6 +180,11 @@ public class GraphWindow extends JFrame {
 				}
 			} else if ("Dijkstra".equals(selectedAlgorithm)) {
 				try {
+					List<Vertex> path = graph.runAlgorithmBFSandDijkstras("Dijkstra", start, end);
+		            System.out.print("Path: ");
+		            for (Vertex vertex : path) {
+		                System.out.print(vertex.getLabel() + " ");  // Assuming Vertex has a 'getName()' method
+		            }
 					// Clear DFS results
 					graphCanvas.setCycles(null);
 
@@ -189,9 +194,9 @@ public class GraphWindow extends JFrame {
 
 						// Get the path distance to display
 						DijkstraAdapter dijkstraAdapter = new DijkstraAdapter(graph);
-						double distance = dijkstraAdapter.getPathDistance(end);
+//						double distance = dijkstraAdapter.weightFinal();
 
-						statusLabel.setText("Dijkstra Path found! Total weight: " + distance);
+						statusLabel.setText("Dijkstra Path found!");
 					} else {
 						graphCanvas.setPath(null);
 						statusLabel.setText("No path exists between selected vertices");
@@ -199,6 +204,7 @@ public class GraphWindow extends JFrame {
 						statusLabel.setText("No cycle exists between selected vertices");
 					}
 				} catch (Exception ex) {
+					ex.printStackTrace();
 					statusLabel.setText("Error: " + ex.getMessage());
 				}
 			}

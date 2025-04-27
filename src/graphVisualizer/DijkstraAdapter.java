@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 /**
@@ -20,6 +21,7 @@ public class DijkstraAdapter {
 	private double[] distTo; // distTo[v] = distance of shortest s->v path
 	private int[] edgeTo; // edgeTo[v] = last edge on shortest s->v path
 	private boolean[] visited; // keeps track of processed vertices
+	private double pathDistance;
 
 	/**
 	 * Constructor initializes the maps for vertex-index conversion
@@ -28,6 +30,9 @@ public class DijkstraAdapter {
 	 */
 	public DijkstraAdapter(Graph graph) {
 		this.graph = graph;
+//		this.pathDistance = pathDistance;
+		this.distTo = new double[graph.getVertices().size()];
+//		Arrays.fill(distTo, Double.POSITIVE_INFINITY);
 
 		vertexToIndex = new HashMap<>();
 		indexToVertex = new HashMap<>();
@@ -84,53 +89,57 @@ public class DijkstraAdapter {
 	 * @param start index of the starting vertex
 	 */
 	private void dijkstra(int start) {
-		int n = vertexToIndex.size();
+	    int n = vertexToIndex.size();
 
-		// Initialize arrays
-		distTo = new double[n];
-		edgeTo = new int[n];
-		visited = new boolean[n];
+	    // Initialize arrays
+//	    distTo = new double[n];
+	    edgeTo = new int[n];
+	    visited = new boolean[n];
 
-		// Set all distances to infinity initially
-		Arrays.fill(distTo, Double.POSITIVE_INFINITY);
-		distTo[start] = 0.0;
-//		for (int v = 0; v < n; v++) {
-//			distTo[v] = Double.POSITIVE_INFINITY;
-//		}
-		System.out.println("Initial distTo: " + Arrays.toString(distTo));
+	    // Set all distances to infinity initially
+	    Arrays.fill(distTo, Double.POSITIVE_INFINITY);
+	    distTo[start] = 0.0;
 
-		// Create priority queue with custom comparator to order by distance
-		PriorityQueue<Integer> pq = new PriorityQueue<>((v, w) -> Double.compare(distTo[v], distTo[w]));
-		pq.add(start);
+	    // Create priority queue with custom comparator to order by distance
+	    PriorityQueue<Integer> pq = new PriorityQueue<>((v, w) -> Double.compare(distTo[v], distTo[w]));
+	    pq.add(start);
 
-		while (!pq.isEmpty()) {
-			int v = pq.poll();
+	    while (!pq.isEmpty()) {
+	        int v = pq.poll();
+	        System.out.println("Processing vertex: " + v); // Debug
 
-			// Skip if we've already processed this vertex
-			if (visited[v])
-				continue;
-			visited[v] = true;
+	        // Skip if we've already processed this vertex
+	        if (visited[v])
+	            continue;
+	        visited[v] = true;
 
-			// Process each adjacent vertex
-			for (int w : adj(v)) {
-				// Get the edge between v and w
-				Edge e = findEdge(v, w);
-				if (e == null)
-					continue;
+	        // Process each adjacent vertex
+	        for (int w : adj(v)) {
+	            // Get the edge between v and w
+	            Edge e = findEdge(v, w);
+	            if (e == null)
+	                continue;
 
-				// Edge relaxation: if we found a shorter path to w through v
-				double weight = e.getWeight();
-				System.out.println(weight);
-				if (distTo[w] > distTo[v] + weight) {
-					distTo[w] = distTo[v] + weight;
-					edgeTo[w] = v;
+	            // Edge relaxation: if we found a shorter path to w through v
+	            double weight = e.getWeight();         
+	   
+	            if (distTo[w] > distTo[v] + weight) {
+	                distTo[w] = distTo[v] + weight;
+	                edgeTo[w] = v;
 
-					// Add or update in priority queue
-					pq.add(w);
-				}
-			}
-		}
+	                // Add or update in priority queue
+	                pq.add(w);
+	            }
+	        }
+	    }
+	    double weightFinal = distTo[distTo.length - 1];
+//	    return weightFinal;
 	}
+	
+//	public void weightFinal() {
+//		dijkstra(start);
+//	}
+
 
 	/**
 	 * Finds the edge between two vertices given their indices
@@ -169,6 +178,7 @@ public class DijkstraAdapter {
 	 */
 	public double getPathDistance(Vertex end) {
 		int endIndex = vertexToIndex.get(end);
+		System.out.println(end.getLabel());
 		return distTo[endIndex];
 	}
 }
